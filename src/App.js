@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import getPokemonDefault from './getPokemon'
 
 function App() {
+  const [ count, countChange ] = useState(1)
+  const [ pokName, changePokName] = useState('loading')
+  function incrementCounter() {
+    countChange(count + 1);
+  }
+  function decrementCounter() {
+    const newCount = count - 1;
+    if (newCount > 0) {
+      countChange(count - 1);
+    }
+  }
+  useEffect(() => {
+    getPokemonDefault(count).then(({ name }) => {
+      changePokName(name)
+    });
+  }, [count]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={decrementCounter}>-</button>
+      <div>{count} : {pokName}</div>
+      <button className="increment" onClick={incrementCounter}>+</button>
     </div>
   );
 }
-
 export default App;
